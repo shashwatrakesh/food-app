@@ -17,7 +17,6 @@ const RestaurantMenu = () => {
       MENU_API + resId + `&catalog_qa=undefined&submitAction=ENTER`
     );
     const json = await data.json();
-    console.log(json);
     setResInfo(json);
   };
 

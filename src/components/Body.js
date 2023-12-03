@@ -31,19 +31,30 @@ setListOfRestaurants = arr[1]
 
   const fetchRestaurantData = async () => {
     const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=27.8973944&lng=78.0880129&page_type=DESKTOP_WEB_LISTING"
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING"
     );
-    const jsonData = await data.json();
+    const json = await data.json();
+
+    // initialize checkJsonData() function to check Swiggy Restaurant data
+    async function checkJsonData(jsonData) {
+      for (let i = 0; i < jsonData?.data?.cards.length; i++) {
+        // initialize checkData for Swiggy Restaurant data
+        let checkData =
+          json?.data?.cards[i]?.card?.card?.gridElements?.infoWithStyle
+            ?.restaurants;
+
+        // if checkData is not undefined then return it
+        if (checkData !== undefined) {
+          return checkData;
+        }
+      }
+    }
+
+    const resData = await checkJsonData(json);
 
     //Optional Chaining
-    setListOfAllRestaurants(
-      jsonData?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants
-    );
-    setListOfFilteredRestaurants(
-      jsonData?.data?.cards[2]?.card?.card?.gridElements?.infoWithStyle
-        ?.restaurants
-    );
+    setListOfAllRestaurants(resData);
+    setListOfFilteredRestaurants(resData);
   };
 
   //Early return => conditions for different use cases
@@ -62,7 +73,7 @@ setListOfRestaurants = arr[1]
           type="text"
           className="search-input"
           placeholder="Search"
-          value={searchTxt} //this is one way data binding. The value of inout box is bound to sdearchText. It changes when the variable changes. But the variable cannot change from the input
+          value={searchTxt} //this is one way data binding. The value of inout box is bound to searchTxt. It changes when the variable changes. But the variable cannot change from the input
           onChange={(e) => {
             setSearchTxt(e.target.value); // this is 2-way binding. I can update search text from here as well. Read and write both
           }}
@@ -77,7 +88,7 @@ setListOfRestaurants = arr[1]
           onClick={() => {
             // using hooks to update state
             const filteredList = listOfAllRestaurants.filter(
-              (res) => res.data.avgRating > 4
+              (res) => res.info.avgRating > 4
             );
             setListOfFilteredRestaurants(filteredList);
           }}

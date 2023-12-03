@@ -13,8 +13,6 @@ const RestaurantCard = (props) => {
     id,
   } = resData?.info;
 
-  console.log(resData?.info);
-
   const RestaurantCardStyle = {
     backgroundColor: "#F0F0F0",
   };
