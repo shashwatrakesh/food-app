@@ -1,6 +1,7 @@
 import RestaurantCard from "./RestaurantCard";
 import { useState, useEffect } from "react";
 import ShimmerUI from "./ShimmerUI";
+import useOnlineStatus from "../../utils/useOnlineStatus";
 
 const Body = () => {
   //Local State Variable
@@ -59,6 +60,10 @@ setListOfRestaurants = arr[1]
 
   //Early return => conditions for different use cases
   // Conditional rendering
+  const onlineStatus = useOnlineStatus();
+
+  if (onlineStatus === false) return <h1>Internet is offline</h1>;
+
   if (!listOfAllRestaurants) return null;
 
   if (listOfFilteredRestaurants?.length === 0)
