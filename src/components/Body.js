@@ -72,24 +72,25 @@ setListOfRestaurants = arr[1]
   return listOfAllRestaurants.length === 0 ? (
     <ShimmerUI />
   ) : (
-    <div className="body">
-      <div className="search-container">
+    <div>
+      <div className="p-4 mb-4 flex">
         <input
           type="text"
-          className="search-input"
+          className="border border-solid	border-black mr-3"
           placeholder="Search"
           value={searchTxt} //this is one way data binding. The value of inout box is bound to searchTxt. It changes when the variable changes. But the variable cannot change from the input
           onChange={(e) => {
             setSearchTxt(e.target.value); // this is 2-way binding. I can update search text from here as well. Read and write both
           }}
         />
-        <button className="search-btn" onClick={filterResDataForSearch}>
+        <button
+          className="px-2 bg-cyan-500 rounded-lg"
+          onClick={filterResDataForSearch}
+        >
           Search
         </button>
-      </div>
-      <div className="filter">
         <button
-          className="filter-btn"
+          className="mx-10 px-2 bg-gray-200 rounded-lg"
           onClick={() => {
             // using hooks to update state
             const filteredList = listOfAllRestaurants.filter(
@@ -101,7 +102,8 @@ setListOfRestaurants = arr[1]
           Top Rated restaurants
         </button>
       </div>
-      <div className="res-container">
+
+      <div className="flex flex-wrap justify-between">
         {listOfFilteredRestaurants.map((res, i) => {
           return (
             <RestaurantCard resData={res} key={`resDataList?.data?.id${i}`} />

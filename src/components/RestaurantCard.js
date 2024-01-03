@@ -13,19 +13,15 @@ const RestaurantCard = (props) => {
     id,
   } = resData?.info;
 
-  const RestaurantCardStyle = {
-    backgroundColor: "#F0F0F0",
-  };
-
   return (
     <Link to={"restaurants/" + id}>
-      <div className="res-card" style={RestaurantCardStyle}>
+      <div className="m-4 p-4 w-[200px] rounded-lg bg-gray-100 hover:bg-gray-200">
         <img
-          className="res-logo"
+          className="rounded-lg mb-4"
           alt="res-logo"
           src={`${CDN_URL}${cloudinaryImageId}`}
         />
-        <h3>{name}</h3>
+        <h3 className="font-bold">{name}</h3>
         <h4>{cuisines.join(", ")}</h4>
         <h4>{avgRating} stars</h4>
         <h4>{costForTwo}</h4>
