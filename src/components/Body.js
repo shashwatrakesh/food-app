@@ -1,7 +1,8 @@
-import RestaurantCard from "./RestaurantCard";
-import { useState, useEffect } from "react";
+import RestaurantCard, { withOpenLabel } from "./RestaurantCard";
+import { useState, useEffect, useContext } from "react";
 import ShimmerUI from "./ShimmerUI";
 import useOnlineStatus from "../../utils/useOnlineStatus";
+import UserContext from "../../utils/UserContext";
 
 const Body = () => {
   //Local State Variable
@@ -15,6 +16,10 @@ const arr = useState(resDataList)
 listOfRestaurants = arr[0]
 setListOfRestaurants = arr[1]
  */
+
+  const RestaurantCardWithLabel = withOpenLabel(RestaurantCard);
+
+  const { setUserName } = useContext(UserContext);
 
   const filterResDataForSearch = () => {
     const filteredResDataForSearch = listOfAllRestaurants.filter((res) =>
@@ -76,7 +81,7 @@ setListOfRestaurants = arr[1]
       <div className="p-4 mb-4 flex">
         <input
           type="text"
-          className="border border-solid	border-black mr-3"
+          className="border border-solid	border-black mr-3 px-2"
           placeholder="Search"
           value={searchTxt} //this is one way data binding. The value of inout box is bound to searchTxt. It changes when the variable changes. But the variable cannot change from the input
           onChange={(e) => {
@@ -101,12 +106,26 @@ setListOfRestaurants = arr[1]
         >
           Top Rated restaurants
         </button>
+        <input
+          type="text"
+          className="border border-solid	border-black mr-3 px-2"
+          placeholder="Search"
+          onChange={(e) => setUserName(e.target.value)}
+        />
       </div>
 
       <div className="flex flex-wrap justify-between">
         {listOfFilteredRestaurants.map((res, i) => {
           return (
-            <RestaurantCard resData={res} key={`resDataList?.data?.id${i}`} />
+            /** if the restaurant has promoted label in it use HOF */
+            res.info.isOpen ? (
+              <RestaurantCardWithLabel
+                resData={res}
+                key={`resDataList?.data?.id${i}`}
+              />
+            ) : (
+              <RestaurantCard resData={res} key={`resDataList?.data?.id${i}`} />
+            )
           );
         })}
       </div>

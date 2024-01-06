@@ -3,6 +3,7 @@ import ShimmerUI from "./ShimmerUI";
 import { useParams } from "react-router-dom";
 import { MENU_API } from "../../utils/constants";
 import useRestaurantMenu from "../../utils/useRestaurantMenu";
+import RestaurantCategory from "./RestaurantCategory";
 
 const RestaurantMenu = () => {
   /* * 
@@ -31,23 +32,42 @@ const RestaurantMenu = () => {
   // Code through using custom hook. Get the data and display. How to get the data is abstracted.
   const { resId } = useParams();
 
+  const [showIndex, setShowIndex] = useState(null);
+
   const resInfo = useRestaurantMenu(resId);
 
   if (resInfo === null) return <ShimmerUI />;
 
-  const { name, cloudinaryImageId, costForTwo, cuisines } =
+  const { name, costForTwo, cuisines } =
     resInfo?.data?.cards[0]?.card?.card?.info;
 
+  const { itemCards } =
+    resInfo?.data?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card
+      ?.card;
+
+  const categories =
+    resInfo?.data?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter(
+      (c) =>
+        c.card?.card?.["@type"] ===
+        "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory"
+    );
+
   return (
-    <div className="menu">
-      <h1>{name}</h1>
-      <h3>{cuisines.join(", ")}</h3>
-      <p>{costForTwo} for two</p>
-      <ul>
-        <li>Biryani</li>
-        <li>Burger</li>
-        <li>Coke</li>
-      </ul>
+    <div className="text-center">
+      <h1 className="font-bold m-6 text-2xl">{name}</h1>
+      <p className="font-bold text-l">
+        {cuisines.join(", ")} - {costForTwo} for two
+      </p>
+      {/* categories accordian*/}
+      {categories.map((category, index) => (
+        // Controlled Component
+        <RestaurantCategory
+          key={index}
+          data={category?.card?.card}
+          showItems={index === showIndex && true}
+          setShowIndex={() => setShowIndex(index)}
+        />
+      ))}
     </div>
   );
 };

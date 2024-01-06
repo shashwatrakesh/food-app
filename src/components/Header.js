@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { LOGO_URL } from "../../utils/constants";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../../utils/useOnlineStatus";
+import UserContext from "../../utils/UserContext";
 
 const Header = () => {
   const [title, setTitle] = useState("Food Villa");
@@ -14,6 +15,8 @@ const Header = () => {
   };
 
   const onlineStatus = useOnlineStatus();
+
+  const { loggedInuser } = useContext(UserContext);
 
   return (
     <div className="flex justify-between items-center bg-slate-400 sm:bg-yellow-50 lg:bg-green-100">
@@ -38,21 +41,24 @@ const Header = () => {
           <li className="px-4">
             <p>Online Status: {onlineStatus ? "✅" : "🛑"}</p>
           </li>
-          <li className="px-4">
+          <li className="px-2">
             <Link to="/">Home</Link>
           </li>
-          <li className="px-4">
+          <li className="px-2">
             <Link to="/about">About Us</Link>
           </li>
-          <li className="px-4">
+          <li className="px-2">
             <Link to="/contact">Contact Us</Link>
           </li>
-          <li className="px-4">
+          <li className="px-2">
             <Link to="/grocery">Grocery</Link>
           </li>
-          <li>Cart</li>
+          <li className="px-2">Cart</li>
           <li>
             <button onClick={authenticateUser}>{buttonName}</button>
+          </li>
+          <li className="px-2 font-bold">
+            <button>{loggedInuser}</button>
           </li>
         </ul>
       </div>
